@@ -6,14 +6,17 @@ module.exports = {
   },
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
+      query: {
+        presets: ['es2015', 'react']
+      }
     }]
   },
   devServer: {
     proxy: {
-      '/api/**': 'http://localhost:3000',
+      '/data': 'http://localhost:3000',
     }
   },
 }
