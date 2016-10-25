@@ -14,7 +14,7 @@ const User = sequelize.define('user', {
   },
   username: {
     type: Sequelize.STRING,
-    field: 'first_name' // Will result in an attribute that is firstName when user facing but first_name in the database
+    field: 'username' // Will result in an attribute that is firstName when user facing but first_name in the database
   },
   elo: {
     type: Sequelize.INTEGER,
