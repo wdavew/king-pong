@@ -23,10 +23,9 @@ class Leaderboard extends Component {
 
   updateElo(user, targetUser) {
     console.log(`updating elo for ${user} and ${targetUser}`);
-    fetch(`/data/users/${user}/${targetUser}`, { method: 'get' })
+    fetch(`/data/${this.state.league}/${user}/${targetUser}`, { method: 'get' })
       .then(response => response.json())
       .then((jsonData) => {
-        console.log(jsonData);
         this.syncData();
       })
   }
@@ -53,14 +52,14 @@ class Leaderboard extends Component {
         <li className='user-card' key={index} id={`user${index}`}>
           <UserCard league={user.league}
             username={user.username} elo={user.elo} games={user.games} img={user.img}
-            handleWinClick={this.updateElo} />
+            handleWinClick={this.updateElo} ranking={index + 1} />
         </li>
       )
     });
 
     return (
       <div>
-        <h1>"Hi this is my app"</h1>
+        <h1>"Ping Pong Standings"</h1>
         <ul>
           {users}
         </ul>
