@@ -5,6 +5,7 @@ const app = express();
 const UserCtrl = require('./controllers/userController');
 
 app.get('/data/:league', UserCtrl.findUsersOfLeague);
+app.get('/data/users/:username1/:username2', UserCtrl.getNewElo);
 
 // const elo = new Elo();
 // const alice = 1200;
