@@ -7,7 +7,8 @@
     "test": "tape test/*.js",
     "build": "webpack",
     "start:webpack": "webpack-dev-server --content-base build/ --inline --hot",
-    "start": "node src/server.js"
+    "start": "nodemon src/server/server.js",
+    "fillDB": "node src/models/saveTestData.js"
   },
   "repository": {
     "type": "git",
@@ -29,11 +30,15 @@
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
+    "nodemon": "^1.11.0",
     "tape": "^4.6.2",
     "webpack": "^1.13.2"
   },
   "dependencies": {
+    "arpad": "^0.1.2",
+    "pg": "^6.1.0",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "sequelize": "^3.24.5"
   }
 }
