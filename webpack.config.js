@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/index.js',
   output: {
     path: 'build',
     filename: 'webpack-bundle.js'
