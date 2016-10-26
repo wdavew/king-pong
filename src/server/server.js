@@ -8,6 +8,16 @@ const LeagueCtrl = require('./controllers/leagueController');
 const MsgCtrl = require('./controllers/msgController');
 
 const path = require('path');
+pg.connect("postgres://davidwilson:password@localhost/kingpong", function (err, client) {
+  if (err) console.log(err);
+  else {
+    client.query("LISTEN updates");
+    client.on('notification', function (msg) {
+      console.log(msg);
+    });
+  }
+})
+
 
 
 const jsonBodyParser = bodyParser.json()
@@ -24,7 +34,7 @@ app.post('/data/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
 app.post('/data/leagues/join', UserCtrl.joinLeague);
 app.post('/data/messages/send', MsgCtrl.createMessage);
 app.get('/data/messages/get/:username', MsgCtrl.getMessages);
-app.delete('/data/messages/delete/:id', MsgCtrl.getMessages);
+app.delete('/data/messages/delete/:id', MsgCtrl.removeMessage);
 
 // app.get('*', (req, res) => {
 //   console.log('serving default route');

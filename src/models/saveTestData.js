@@ -58,7 +58,26 @@ const League = sequelize.define('league', {
   },
 });
 
-sequelize.sync({force: true})
-.then( () => User.bulkCreate(testData.userData))
-.then( () => League.bulkCreate(testData.leagueData))
-.then( () => sequelize.close());
+const triggerQuery = `
+CREATE OR REPLACE FUNCTION notify_trigger() RETURNS trigger AS $$
+DECLARE
+BEGIN
+  PERFORM pg_notify('updates', TG_TABLE_NAME );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql;
+`
+
+function createTrigger(tableName) {
+  return `
+CREATE TRIGGER ${tableName}trigger AFTER insert or update or delete on ${tableName} execute procedure notify_trigger();
+`
+}
+
+sequelize.sync({ force: true })
+  .then(() => User.bulkCreate(testData.userData))
+  .then(() => League.bulkCreate(testData.leagueData))
+  .then(() => sequelize.query(triggerQuery))
+  .then(() => sequelize.query(createTrigger('users')))
+  .then(() => sequelize.query(createTrigger('messages')))
+  .then(() => sequelize.close());
