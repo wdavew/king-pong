@@ -8,19 +8,13 @@ const Elo = require('arpad');
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       users: [],
       league: props.league,
       username: props.username,
       recordMenuOn: false,
     };
-    this.showRecordMenu = this.showRecordMenu.bind(this);
     this.updateElo = this.updateElo.bind(this);
-  }
-
-  showRecordMenu() {
-    console.log('showing record menu');
   }
 
   updateElo(targetUser) {

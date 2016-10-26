@@ -1,4 +1,5 @@
-module.exports = [
+module.exports = {
+  userData: [
   {
     "username": "Ned_Stark",
     "elo": 1200,
@@ -6,6 +7,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Cersei_Lannister",
@@ -14,6 +16,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Tywin_Lannister",
@@ -22,6 +25,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Jon_Snow",
@@ -30,6 +34,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Daenerys Targaryen",
@@ -38,6 +43,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Hodor",
@@ -46,6 +52,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Petyr Baelish",
@@ -54,6 +61,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Melisandre",
@@ -62,6 +70,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Joffrey",
@@ -70,6 +79,7 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
   {
     "username": "Khal Drogo",
@@ -78,5 +88,10 @@ module.exports = [
     "wins": 0,
     "league": "Westeros",
     "imgLink": "#",
+    "password": "cat"
   },
-]
+  ],
+  leagueData: [{
+    'league': 'Westeros'
+  }]
+}
