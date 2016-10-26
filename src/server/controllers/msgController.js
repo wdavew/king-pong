@@ -8,7 +8,7 @@ function createMessage(req, res) {
     sender: req.body.sender,
     receiver: req.body.receiver,
     action: req.body.action
-  })
+  }).then(() => res.status(200).end('done'));
 }
 
 function getMessages(req, res) {

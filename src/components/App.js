@@ -4,6 +4,7 @@ import LeagueList from './LeagueList.js';
 import Login from './Login.js';
 import Signup from './Signup.js';
 import LeagueForm from './LeagueForm.js';
+require('../static/mainstyle.css');
 
 import { Router, Route, Link, browserHistory } from 'react-router'
 

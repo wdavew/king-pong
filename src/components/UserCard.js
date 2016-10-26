@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import ClickableButton from './ClickableButton.js';
 
-function UserCard({id, username, ranking, elo, games, league, img, handleWinClick}) {
-  return (
-    <div className='user-card'>
-      <p> <span className='rank-num'>{`${ranking}. `}</span> {username} </p>
-      <p> Elo: {elo} </p>
-      <ClickableButton handleClick={() => handleWinClick(username)} displayText={'I just beat this person'} />
+class UserCard extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-    </div>
-  )
+  render() {
+    return (
+      <div className='user-card'>
+        <p> <span className='rank-num'>{`${this.props.ranking}. `}</span> {this.props.username} </p>
+        <p> Elo: {this.props.elo} </p>
+        <ClickableButton handleClick={() => this.props.handleWinClick(this.props.username)}
+          displayText={'I just beat this person'} />
+      </div>
+    )
+  }
 }
 
 export default UserCard;

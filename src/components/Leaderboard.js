@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import UserCard from './UserCard.js';
 import ClickableButton from './ClickableButton.js';
 import RecordMenu from './ClickableButton.js';
+import FlipMove from 'react-flip-move';
+
 import Message from './Message.js';
-
 const Elo = require('arpad');
-
+const socket = io.connect('http://localhost:3000/')
 
 class Leaderboard extends Component {
   constructor(props) {
@@ -39,7 +40,8 @@ class Leaderboard extends Component {
     fetch(`/data/league/${this.state.league}/${this.state.username}/${targetUser}`, { method: 'get' })
       .then(response => response.text())
       .then((response) => {
-        this.syncData();
+        console.log('client socket emitting');
+        socket.emit('reloadUserRequest');
       })
   }
 
@@ -64,10 +66,14 @@ class Leaderboard extends Component {
       headers: new Headers({
         'Content-Type': 'application/json',
       })
+    }).then((response) => {
+      console.log('client socket emitting');
+      socket.emit('messageSent');
     })
   }
 
   syncData() {
+    console.log('syncing user data')
     return fetch(`/data/league/${this.state.league}`, { method: 'get' })
       .then(response => response.json())
       .then((jsonUserData) => {
@@ -80,13 +86,21 @@ class Leaderboard extends Component {
 
   componentDidMount() {
     console.log('board has mounted and is requesting league data');
+    socket.on('reloadUsers', () => {
+      console.log('reloading users')
+      this.syncData()
+    });
+    socket.on('updateMessages', () => {
+      console.log('reloading messages')
+      this.gatherMessages()
+    });
     this.syncData().then(() => this.gatherMessages());
   }
 
   render() {
     const users = this.state.users.map((user, index) => {
       return (
-        <li className='user-card' key={index} id={`user${index}`}>
+        <li className='user-card' key={`${user.username}`} id={`user${index}`}>
           <UserCard league={user.league}
             username={user.username} elo={user.elo} games={user.games} img={user.img}
             handleWinClick={this.requestEloUpdate} ranking={index + 1} />
@@ -107,9 +121,9 @@ class Leaderboard extends Component {
       <div>
         <h1>{`${this.state.league} Standings`}</h1>
         <h2>{`You are logged in as ${this.state.username}`}</h2>
-        <ul>
+        <FlipMove typeName='ul' duration='350' enterAnimation='fade'>
           {users}
-        </ul>
+        </FlipMove>
         <ul>
           {messages}
         </ul>

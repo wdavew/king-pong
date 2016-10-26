@@ -3,22 +3,25 @@ const Elo = require('arpad');
 const pg = require('pg');
 const bodyParser = require('body-parser');
 const app = express();
+const server = require('http').Server(app);
 const UserCtrl = require('./controllers/userController');
 const LeagueCtrl = require('./controllers/leagueController');
 const MsgCtrl = require('./controllers/msgController');
-
 const path = require('path');
-pg.connect("postgres://davidwilson:password@localhost/kingpong", function (err, client) {
-  if (err) console.log(err);
-  else {
-    client.query("LISTEN updates");
-    client.on('notification', function (msg) {
-      console.log(msg);
-    });
-  }
-})
+const io = require('socket.io')(server);
 
 
+io.on('connection', function (socket) {
+  socket.on('reloadUserRequest', function (data) {
+    console.log('user socket emitting')
+    io.emit('reloadUsers');
+  });
+
+  socket.on('messageSent', function (data) {
+    console.log('message socket emitting')
+    io.emit('updateMessages');
+  });
+});
 
 const jsonBodyParser = bodyParser.json()
 
@@ -41,4 +44,4 @@ app.delete('/data/messages/delete/:id', MsgCtrl.removeMessage);
 //   res.sendFile(path.resolve('./', 'build', 'index.html'))
 // })
 
-app.listen(3000);
+server.listen(3000);
