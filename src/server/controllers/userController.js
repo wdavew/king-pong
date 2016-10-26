@@ -21,10 +21,14 @@ function findUser(req, res) {
 function findUserLeagues(req, res) {
   User.findAll({
     where: { username: req.params.username },
-    attributes: ['league']
+    attributes: ['username', 'league']
   }).then((data) => {
-    console.log(data);
-    return res.json(data)
+    if (data.length > 0) {
+      console.log(data);
+      return res.json(data);
+    } else {
+      return res.status(400).end('User not found');
+    }
   });
 }
 
@@ -44,41 +48,48 @@ function getNewElo(req, res) {
 }
 
 function createNewUser(req, res) {
-  let user;  
-  User.findOne({where: { username: req.body.username}})
-  .then((data) => {
-    user = data
-  })
-  .then(() => {
+  let user;
+  User.findOne({ where: { username: req.body.username } })
+    .then((data) => {
+      user = data
+    })
+    .then(() => {
       if (!user) {
         console.log('creating', req.body)
         User.create(req.body)
-        .then(() => res.status(200).end())
-        .catch((error) => res.status(400).end(error.errors[0].message));
+          .then(() => res.status(200).end())
+          .catch((error) => res.status(400).end(error.errors[0].message));
       } else {
         res.status(400).end('User already exists');
       }
-  });
+    });
 }
 
 function joinLeague(req, res) {
-  let user;  
-  User.findOne({where: { username: req.body.username}})
-  .then((data) => {
-    user = data
-  })
-  .then(() => {
-      if (!user) {
-        console.log('creating', req.body)
-        User.create(req.body)
-        .then(() => res.status(200).end())
-        .catch((error) => res.status(400).end(error.errors[0].message));
+  let user;
+  console.log(req.body.username);
+  console.log(req.body.league);
+  User.findAll({ where: { username: req.body.username } })
+    .then(data => {
+      user = data
+    })
+    .then(() => {
+      if (user.length === 1 && user[0].league === null) {
+        user[0].update({ league: req.body.league })
+          .then(() => res.status(200).end())
+          .catch((error) => res.status(400).end(error));
       } else {
-        res.status(400).end('User already exists');
+        User.create({
+          username: user[0].username,
+          password: user[0].password,
+          league: req.body.league
+        })
+          .then(() => res.status(200).end())
+          .catch((error) => console.log(error));
       }
-  });
+    });
 }
 
 
 
-module.exports = { findUser, findUsersOfLeague, findUserLeagues, getNewElo, createNewUser };
+module.exports = { findUser, findUsersOfLeague, findUserLeagues, getNewElo, createNewUser, joinLeague };

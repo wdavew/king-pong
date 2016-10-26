@@ -19,12 +19,14 @@ class App extends Component {
       newLeague: '',
       leagues: [],
       activeLeague: '',
+      selectedLeague: '',
     }
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleInputTextChange = this.handleInputTextChange.bind(this);
     this.enterLeague = this.enterLeague.bind(this);
     this.postUserData = this.postUserData.bind(this);
     this.postLeagueData = this.postLeagueData.bind(this);
+    this.joinLeague = this.joinLeague.bind(this);
   }
 
   syncLeagues() {
@@ -42,6 +44,7 @@ class App extends Component {
     this.syncLeagues();
   }
   handleInputTextChange(event, stateKey) {
+    console.log(this.state.selectedLeague);
     const newState = {};
     newState[stateKey] = event.target.value;
     this.setState(newState);
@@ -54,9 +57,20 @@ class App extends Component {
     });
   }
 
+  joinLeague(e) {
+    e.preventDefault();
+    fetch('/data/leagues/join', {
+      method: 'POST',
+      body: JSON.stringify({ username: this.state.username, league: this.state.selectedLeague }),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(() => this.refreshUserLeagues());
+  }
+
   postUserData(e) {
     e.preventDefault();
-    const {newUser, newPassword} = this.state;
+    const {newUser, newPassword } = this.state;
     fetch('/data/createNewUser/newUser', {
       method: 'POST',
       body: JSON.stringify({ username: newUser, password: newPassword }),
@@ -78,7 +92,6 @@ class App extends Component {
     }).then(() => this.syncLeagues());
   }
 
-
   handleLoginSubmit(e) {
     e.preventDefault();
     fetch(`/data/userLeagues/${this.state.username}`, { method: 'get' })
@@ -92,33 +105,39 @@ class App extends Component {
       })
   }
 
-  render() {
-    const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
-      <LeagueList leagues={this.state.leagues} enterLeague={this.enterLeague} />
-      : null;
-    const leaderboard = this.state.activeLeague ?
-      <Leaderboard league={this.state.activeLeague} username={this.state.username} />
-      : null;
-    const login = !this.state.isLoggedIn ?
-      <Login submitLogin={this.handleLoginSubmit} handleInputTextChange={(e) => this.handleInputTextChange(e, 'username')} />
-      : null;
-    const signup = !this.state.isLoggedIn ?
-      <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
-      : null;
-    const leagueForm = this.state.isLoggedIn ?
-      <LeagueForm chooseLeague={this.postLeagueData} submit={this.postLeagueData}
-        leagues={this.state.allLeagues} handleInputTextChange={this.handleInputTextChange} />
-      : null;
-    return (
-      <div>
-        {login}
-        {leagues}
-        {signup}
-        {leagueForm}
-        {leaderboard}
-      </div>
-    )
+  refreshUserLeagues() {
+    fetch(`/data/userLeagues/${this.state.username}`, { method: 'get' })
+      .then(response => response.json())
+      .then(jsonData => this.setState({ leagues: jsonData.map(obj => obj.league) }));
   }
+
+render() {
+  const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
+    <LeagueList leagues={this.state.leagues} enterLeague={this.enterLeague} />
+    : null;
+  const leaderboard = this.state.activeLeague ?
+    <Leaderboard league={this.state.activeLeague} username={this.state.username} />
+    : null;
+  const login = !this.state.isLoggedIn ?
+    <Login submitLogin={this.handleLoginSubmit} handleInputTextChange={(e) => this.handleInputTextChange(e, 'username')} />
+    : null;
+  const signup = !this.state.isLoggedIn ?
+    <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
+    : null;
+  const leagueForm = this.state.isLoggedIn && !this.state.activeLeague ?
+    <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
+      leagues={this.state.allLeagues} handleInputTextChange={this.handleInputTextChange} />
+    : null;
+  return (
+    <div>
+      {login}
+      {leagues}
+      {signup}
+      {leagueForm}
+      {leaderboard}
+    </div>
+  )
+}
 };
 
 export default App;

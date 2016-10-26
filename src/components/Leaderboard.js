@@ -27,7 +27,7 @@ class Leaderboard extends Component {
   }
 
   syncData() {
-    fetch('/data/Westeros', { method: 'get' })
+    fetch(`/data/${this.state.league}`, { method: 'get' })
       .then(response => response.json())
       .then((jsonUserData) => {
         this.setState({

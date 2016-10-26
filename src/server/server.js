@@ -20,11 +20,11 @@ app.get('/data/getAllLeagues/leagues', LeagueCtrl.findAllLeagues);
 app.use(bodyParser.json());
 app.post('/data/createNewUser/newUser', UserCtrl.createNewUser);
 app.post('/data/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
-app.post('/data/users/joinLeague/:user/:league', UserCtrl.joinLeague);
+app.post('/data/leagues/join', UserCtrl.joinLeague);
 
-app.get('*', (req, res) => {
-  console.log('serving default route');
-  res.sendFile(path.resolve('./', 'build', 'index.html'))
-})
+// app.get('*', (req, res) => {
+//   console.log('serving default route');
+//   res.sendFile(path.resolve('./', 'build', 'index.html'))
+// })
 
 app.listen(3000);
