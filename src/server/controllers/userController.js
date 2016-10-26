@@ -41,8 +41,8 @@ function getNewElo(req, res) {
   const user2Promise = User.findOne({ where: { username: req.params.username2, league: req.params.league } })
     .then(data => { user2 = data; })
   Promise.all([user1Promise, user2Promise]).then(() => {
-    user1.update({ 'elo': elo.newRatingIfWon(user1.elo, user2.elo) })
-      .then(user2.update({ 'elo': elo.newRatingIfLost(user2.elo, user1.elo) }))
+    user1.update({ 'elo': elo.newRatingIfLost(user1.elo, user2.elo) })
+      .then(user2.update({ 'elo': elo.newRatingIfWon(user2.elo, user1.elo) }))
       .then(res.json('updated elo in postgres'));
   })
 }
