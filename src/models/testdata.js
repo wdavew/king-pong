@@ -24,7 +24,7 @@ module.exports = [
     "imgLink": "#",
   },
   {
-    "username": "Jon Snow",
+    "username": "Jon_Snow",
     "elo": 1200,
     "games": 0,
     "wins": 0,
