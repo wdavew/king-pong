@@ -6,11 +6,13 @@ const Elo = require('arpad');
 
 
 class Leaderboard extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log(props);
     this.state = {
       users: [],
-      league: '',
+      league: props.league,
+      username: props.username,
       recordMenuOn: false,
     };
     this.showRecordMenu = this.showRecordMenu.bind(this);
@@ -21,9 +23,9 @@ class Leaderboard extends Component {
     console.log('showing record menu');
   }
 
-  updateElo(user, targetUser) {
-    console.log(`updating elo for ${user} and ${targetUser}`);
-    fetch(`/data/${this.state.league}/${user}/${targetUser}`, { method: 'get' })
+  updateElo(targetUser) {
+    console.log(`updating elo for ${this.state.username} and ${targetUser}`);
+    fetch(`/data/${this.state.league}/${this.state.username}/${targetUser}`, { method: 'get' })
       .then(response => response.json())
       .then((jsonData) => {
         this.syncData();
@@ -35,7 +37,7 @@ class Leaderboard extends Component {
       .then(response => response.json())
       .then((jsonUserData) => {
         this.setState({
-          league: 'Westeros',
+          league: this.state.league,
           users: jsonUserData
         })
       })
@@ -50,7 +52,7 @@ class Leaderboard extends Component {
     const users = this.state.users.map((user, index) => {
       return (
         <li className='user-card' key={index} id={`user${index}`}>
-          <UserCard league={user.league}
+          <UserCard league={user.league} 
             username={user.username} elo={user.elo} games={user.games} img={user.img}
             handleWinClick={this.updateElo} ranking={index + 1} />
         </li>
@@ -59,7 +61,8 @@ class Leaderboard extends Component {
 
     return (
       <div>
-        <h1>"Ping Pong Standings"</h1>
+        <h1>{`${this.state.league} Standings`}</h1>
+        <h2>{`You are logged in as ${this.state.username}`}</h2>
         <ul>
           {users}
         </ul>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Leaderboard from './Leaderboard.js';
-import Home from './Home';
+import LeagueList from './LeagueList.js';
+import Login from './Login.js';
 import { Router, Route, Link, browserHistory } from 'react-router'
 
 class App extends Component {
@@ -10,14 +11,28 @@ class App extends Component {
       isLoggedIn: false,
       username: '',
       password: '',
-      leauges: [],
+      leagues: [],
+      activeLeague: '',
     }
-    this.submitLogin = this.bind(this.submitLogin);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.handleUserNameChange = this.handleUserNameChange.bind(this);
+    this.enterLeague = this.enterLeague.bind(this);
   }
 
-  submitLogin() {
-    console.log('submitting login');
-    fetch(`/data/users/${this.state.username}`, { method: 'get' })
+  handleUserNameChange(event) {
+    this.setState({ username: event.target.value });
+  }
+
+  enterLeague(league) {
+    this.setState({
+      activeLeague: league,
+      isLoggedIn: true,
+    });
+  }
+
+  handleLoginSubmit(e) {
+    e.preventDefault();
+    fetch(`/data/userLeagues/${this.state.username}`, { method: 'get' })
       .then(response => response.json())
       .then((jsonData) => {
         const leagues = jsonData.map(obj => obj.league);
@@ -26,12 +41,22 @@ class App extends Component {
   }
 
   render() {
+    const leagues = this.state.leagues.length && !this.state.isLoggedIn ? 
+    <LeagueList leagues={this.state.leagues} enterLeague = {this.enterLeague}/> 
+    : null;
+    const leaderboard = this.state.activeLeague ? 
+    <Leaderboard league={this.state.activeLeague} username={this.state.username}/> 
+    : null;
+    const login = !this.state.activeLeague ? 
+    <Login submitLogin={this.handleLoginSubmit} handleUserNameChange={this.handleUserNameChange}/> 
+    : null;
+
     return (
-      <Router history={browserHistory}>
-        <Route path='/' component={Home} username={this.state.username} password={this.state.password}
-        submitLogin = {this.submitLogin} />
-        <Route path='/Leaderboard' component={Leaderboard} />
-      </Router>
+      <div>
+        {login}
+        {leagues}
+        {leaderboard}
+      </div>
     )
   }
 };

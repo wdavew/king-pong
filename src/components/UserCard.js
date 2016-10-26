@@ -6,7 +6,7 @@ function UserCard({id, username, ranking, elo, games, league, img, handleWinClic
     <div className='user-card'>
       <p> <span className='rank-num'>{`${ranking}. `}</span> {username} </p>
       <p> Elo: {elo} </p>
-      <ClickableButton handleClick={() => handleWinClick("Ned_Stark", username)} displayText={'I just beat this person'} />
+      <ClickableButton handleClick={() => handleWinClick(username)} displayText={'I just beat this person'} />
 
     </div>
   )
