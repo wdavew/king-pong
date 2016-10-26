@@ -20,10 +20,16 @@ function getMessages(req, res) {
 }
 
 function removeMessage(req, res) {
-  Message.remove({id: req.params.id})
-    .then(data => res.json(data));
+  Message.find({ id: req.params.id })
+    .then((msg) => {
+      if (msg) {
+        msg.destroy();
+        return res.end('Deleted message from database');
+      }
+      return res.status(400).end('Message already gone');
+    });
 }
 
 
 
-module.exports = { createMessage, getMessages };
+module.exports = { createMessage, getMessages, removeMessage };

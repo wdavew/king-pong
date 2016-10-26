@@ -19,7 +19,9 @@ class Leaderboard extends Component {
     };
     this.updateElo = this.updateElo.bind(this);
     this.requestEloUpdate = this.requestEloUpdate.bind(this);
-
+    this.gatherMessages = this.gatherMessages.bind(this);
+    this.syncData = this.syncData.bind(this);
+    this.deleteMsg = this.deleteMsg.bind(this);
   }
 
   gatherMessages() {
@@ -35,18 +37,18 @@ class Leaderboard extends Component {
   updateElo(targetUser) {
     console.log(`updating elo for ${this.state.username} and ${targetUser}`);
     fetch(`/data/league/${this.state.league}/${this.state.username}/${targetUser}`, { method: 'get' })
-      .then(response => response.json())
-      .then((jsonData) => {
+      .then(response => response.text())
+      .then((response) => {
         this.syncData();
       })
   }
 
   deleteMsg(id) {
     console.log('deleting msg');
+    console.log(this);
     fetch(`/data/messages/delete/${id}`, { method: 'delete' })
-      .then(response => response.json())
-      .then(this.syncData());
-  }
+      .then(() => this.gatherMessages());
+  };
 
 
   requestEloUpdate(targetUser) {
@@ -95,8 +97,8 @@ class Leaderboard extends Component {
     const messages = this.state.messages.map((msg, index) => {
       return (
         <li className='msg' key={msg.id} >
-          <Message action={msg.action} sender={msg.sender} id={msg.id} time={msg.createdAt} 
-          updateElo={this.updateElo} deleteMsg={this.deleteMsg} />
+          <Message action={msg.action} sender={msg.sender} id={msg.id} time={msg.createdAt}
+            updateElo={this.updateElo} deleteMsg={this.deleteMsg} />
         </li>
       )
     });
