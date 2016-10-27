@@ -54,6 +54,7 @@ class Leaderboard extends Component {
 
 
   requestEloUpdate(targetUser) {
+    if (targetUser === this.state.username) return;
     console.log(`sending message to ${targetUser}`);
     fetch(`/data/messages/send`, {
       method: 'POST',
