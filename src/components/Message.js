@@ -16,7 +16,7 @@ class Message extends Component {
         this.props.updateElo(this.props.sender);
         this.props.deleteMsg(this.props.msgId);
       } }>Ok</button>
-      <button onClick={() => this.props.deleteMsg()}>Ignore</button>
+      <button onClick={() => this.props.deleteMsg(this.props.msgId)}>Ignore</button>
     </div>
   )
 }
