@@ -1,0 +1,105 @@
+body {
+  background-color: white;
+  font-family: 'Raleway';
+  font-weight: 300;
+  margin: 0px;
+  padding: 0px;
+  color: black;
+}
+
+.container-fluid {
+  margin: 0px;
+  padding: 0px;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-user {
+  float: right;
+}
+.login-pass {
+  float: left;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.leaguechooser {
+  text-align: center;
+}
+
+.signup {
+  text-align: center;
+}
+.login-form h4 {
+  text-align: center;
+}
+
+textarea:focus, input:focus, .uneditable-input:focus {   
+    box-shadow: none !important;
+    outline: 0 none !important;
+}
+.league-form {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.choose-league-buttons {
+  margin: 0px 10px 10px 10px;
+}
+
+.user-card {
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  margin: 10px 10px 10px 10px;
+  padding: 10px;
+}
+
+.message-list button {
+  margin-right: 15px;
+}
+
+.user-name {
+  font-weight: 800;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 40pt;
+  font-family: 'Oleo Script'; 
+  color: #445E93;
+}
+
+.main-title {
+  color: #445E93;
+  font-family: 'Oleo Script';
+  text-align: center;
+  font-size: 48pt;
+  margin-bottom: 50px;
+}
+
+.display-text {
+  color: #445E93;
+  font-family: 'Oleo Script'; 
+  font-size: 32pt;
+}
+
+.subtitle {
+  color: #445E93;
+  font-family: 'Raleway'; 
+  text-align: center;
+  font-size: 15pt;
+}
+
+#title-div {
+  color: #445E93;
+  margin-top: 0px;
+  padding-top: 0px;
+}
