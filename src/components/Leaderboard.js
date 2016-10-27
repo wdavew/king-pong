@@ -46,7 +46,7 @@ class Leaderboard extends Component {
   }
 
   deleteMsg(id) {
-    console.log('deleting msg');
+    console.log('deleting msg', id);
     console.log(id);
     fetch(`/data/messages/delete/${id}`, { method: 'delete' })
       .then(() => this.gatherMessages());
@@ -109,11 +109,10 @@ class Leaderboard extends Component {
     });
 
     const messages = this.state.messages.map((msg, index) => {
-      console.log('messageId', msg.id)
       return (
         <li className='msg' key={msg.id} >
           <Message action={msg.action} key={msg.id} sender={msg.sender} msgId={msg.id} time={msg.createdAt}
-            updateElo={this.updateElo} deleteMsg={this.deleteMsg.bind(this, msg.id)} />
+            updateElo={this.updateElo} deleteMsg={this.deleteMsg} />
         </li>
       )
     });

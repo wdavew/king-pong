@@ -14,7 +14,7 @@ class Message extends Component {
       <p><span className='user-name'>{this.props.sender}</span> {`${this.text[this.props.action]}`}</p>
       <button onClick={() => {
         this.props.updateElo(this.props.sender);
-        this.props.deleteMsg();
+        this.props.deleteMsg(this.props.msgId);
       } }>Ok</button>
       <button onClick={() => this.props.deleteMsg()}>Ignore</button>
     </div>

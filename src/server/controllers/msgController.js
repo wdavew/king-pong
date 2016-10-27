@@ -20,9 +20,13 @@ function getMessages(req, res) {
 }
 
 function removeMessage(req, res) {
-  Message.find({ id: req.params.id })
+  console.log("request to delete");
+  console.log(req.params.id);
+  Message.findById(req.params.id)
     .then((msg) => {
       if (msg) {
+        console.log('found message');
+        console.log(msg.id);
         msg.destroy();
         return res.status(200).end('Deleted message from database');
       }
