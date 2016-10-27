@@ -112,33 +112,33 @@ class App extends Component {
       .then(jsonData => this.setState({ leagues: jsonData.map(obj => obj.league) }));
   }
 
-render() {
-  const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
-    <LeagueList leagues={this.state.leagues} enterLeague={this.enterLeague} />
-    : null;
-  const leaderboard = this.state.activeLeague ?
-    <Leaderboard league={this.state.activeLeague} username={this.state.username} />
-    : null;
-  const login = !this.state.isLoggedIn ?
-    <Login submitLogin={this.handleLoginSubmit} handleInputTextChange={(e) => this.handleInputTextChange(e, 'username')} />
-    : null;
-  const signup = !this.state.isLoggedIn ?
-    <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
-    : null;
-  const leagueForm = this.state.isLoggedIn && !this.state.activeLeague ?
-    <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
-      leagues={this.state.allLeagues} handleInputTextChange={this.handleInputTextChange} />
-    : null;
-  return (
-    <div>
-      {login}
-      {leagues}
-      {signup}
-      {leagueForm}
-      {leaderboard}
-    </div>
-  )
-}
+  render() {
+    const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
+      <LeagueList leagues={this.state.leagues} enterLeague={this.enterLeague} />
+      : null;
+    const leaderboard = this.state.activeLeague ?
+      <Leaderboard league={this.state.activeLeague} username={this.state.username} />
+      : null;
+    const login = !this.state.isLoggedIn ?
+      <Login submitLogin={this.handleLoginSubmit} handleInputTextChange={(e) => this.handleInputTextChange(e, 'username')} />
+      : null;
+    const signup = !this.state.isLoggedIn ?
+      <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
+      : null;
+    const leagueForm = this.state.isLoggedIn && !this.state.activeLeague ?
+      <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
+        leagues={this.state.allLeagues} handleInputTextChange={this.handleInputTextChange} />
+      : null;
+    return (
+      <div className='container-fluid body-container'>
+        {login}
+        {leagues}
+        {signup}
+        {leagueForm}
+        {leaderboard}
+      </div>
+    )
+  }
 };
 
 export default App;

@@ -24,7 +24,7 @@ function removeMessage(req, res) {
     .then((msg) => {
       if (msg) {
         msg.destroy();
-        return res.end('Deleted message from database');
+        return res.status(200).end('Deleted message from database');
       }
       return res.status(400).end('Message already gone');
     });

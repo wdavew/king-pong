@@ -22,7 +22,6 @@ class Leaderboard extends Component {
     this.requestEloUpdate = this.requestEloUpdate.bind(this);
     this.gatherMessages = this.gatherMessages.bind(this);
     this.syncData = this.syncData.bind(this);
-    this.deleteMsg = this.deleteMsg.bind(this);
   }
 
   gatherMessages() {
@@ -47,7 +46,7 @@ class Leaderboard extends Component {
 
   deleteMsg(id) {
     console.log('deleting msg');
-    console.log(this);
+    console.log(id);
     fetch(`/data/messages/delete/${id}`, { method: 'delete' })
       .then(() => this.gatherMessages());
   };
@@ -100,7 +99,7 @@ class Leaderboard extends Component {
   render() {
     const users = this.state.users.map((user, index) => {
       return (
-        <li className='user-card' key={`${user.username}`} id={`user${index}`}>
+        <li key={`${user.username}`} id={`user${index}`}>
           <UserCard league={user.league}
             username={user.username} elo={user.elo} games={user.games} img={user.img}
             handleWinClick={this.requestEloUpdate} ranking={index + 1} />
@@ -109,25 +108,36 @@ class Leaderboard extends Component {
     });
 
     const messages = this.state.messages.map((msg, index) => {
+      console.log('messageId', msg.id)
       return (
         <li className='msg' key={msg.id} >
-          <Message action={msg.action} sender={msg.sender} id={msg.id} time={msg.createdAt}
-            updateElo={this.updateElo} deleteMsg={this.deleteMsg} />
+          <Message action={msg.action} key={msg.id} sender={msg.sender} msgId={msg.id} time={msg.createdAt}
+            updateElo={this.updateElo} deleteMsg={this.deleteMsg.bind(this, msg.id)} />
         </li>
       )
     });
 
     return (
-      <div>
-        <h1>{`${this.state.league} Standings`}</h1>
-        <h2>{`You are logged in as ${this.state.username}`}</h2>
-        <FlipMove typeName='ul' duration='350' enterAnimation='fade'>
-          {users}
-        </FlipMove>
-        <ul>
-          {messages}
-        </ul>
+      <div className='container leaderboard'>
+        <div>
+          <h1 className='title'>{`${this.state.league} Standings`}</h1>
+        <p className='subtitle'>{`You are logged in as ${this.state.username}`}</p>
       </div>
+      <div className='container'>
+        <div className='row'>
+          <div className='col-xs-12 col-md-6'>
+            <FlipMove typeName='ul' duration='350' enterAnimation='fade'>
+              {users}
+            </FlipMove>
+          </div>
+          <div className='col-xs-12 col-md-6'>
+            <FlipMove typeName='ul' duration='200' enterAnimation='fade' leaveAnimation='accordionVertical'>
+              {messages}
+            </FlipMove>
+          </div>
+        </div>
+      </div>
+      </div >
     )
   }
 }

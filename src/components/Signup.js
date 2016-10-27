@@ -3,10 +3,10 @@ import Form from './Form.js'
 
 function Signup(props) {
   return (
-    <div className='signup'>
-    <p>Signup</p>
-    <Form handleSubmit={props.submit} handleUserChange={(e) => props.handleInputTextChange(e, 'newUser')}
-    handlePasswordChange={(e) => props.handleInputTextChange(e, 'newPassword')}/>
+    <div className='login-form'>
+      <h4>Signup</h4>
+      <Form handleSubmit={props.submit} handleUserChange={(e) => props.handleInputTextChange(e, 'newUser')}
+        handlePasswordChange={(e) => props.handleInputTextChange(e, 'newPassword')} />
     </div>
   )
 }
