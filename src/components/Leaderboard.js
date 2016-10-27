@@ -22,6 +22,7 @@ class Leaderboard extends Component {
     this.requestEloUpdate = this.requestEloUpdate.bind(this);
     this.gatherMessages = this.gatherMessages.bind(this);
     this.syncData = this.syncData.bind(this);
+    this.deleteMsg = this.deleteMsg.bind(this);
   }
 
   gatherMessages() {
@@ -96,7 +97,7 @@ class Leaderboard extends Component {
     this.syncData().then(() => this.gatherMessages());
   }
 
-  render() {
+  render() {  
     const users = this.state.users.map((user, index) => {
       return (
         <li key={`${user.username}`} id={`user${index}`}>
