@@ -22,7 +22,7 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/data': 'http://localhost:3000',
+      '/data': 'http://192.168.0.105:3000',
     }
   },
 }
