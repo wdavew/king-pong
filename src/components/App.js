@@ -4,13 +4,18 @@ import LeagueList from './LeagueList.js';
 import Login from './Login.js';
 import Signup from './Signup.js';
 import LeagueForm from './LeagueForm.js';
+import { Router, Route, Link, browserHistory } from 'react-router'
+import { connect } from 'react-redux';
+import { fetchLeagues } from '../actions/actions.js';
 require('../static/mainstyle.css');
 
-import { Router, Route, Link, browserHistory } from 'react-router'
+const mapStateProps = (state) => (
+  { allLeagues: state.allLeagues }
+)
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isLoggedIn: false,
       username: '',
@@ -31,13 +36,7 @@ class App extends Component {
   }
 
   syncLeagues() {
-    fetch('/data/getAllLeagues/leagues', { method: 'get' })
-      .then(response => response.json())
-      .then((jsonLeagueData) => {
-        this.setState({
-          allLeagues: jsonLeagueData,
-        })
-      })
+    this.props.dispatch(fetchLeagues());
   }
 
   componentDidMount() {
@@ -127,7 +126,7 @@ class App extends Component {
       : null;
     const leagueForm = this.state.isLoggedIn && !this.state.activeLeague ?
       <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
-        leagues={this.state.allLeagues} handleInputTextChange={this.handleInputTextChange} />
+        leagues={this.props.allLeagues} handleInputTextChange={this.handleInputTextChange} />
       : null;
     return (
       <div className='container-fluid body-container'>
@@ -141,4 +140,4 @@ class App extends Component {
   }
 };
 
-export default App;
+export default connect(mapStateProps)(App);
