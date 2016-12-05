@@ -6,7 +6,7 @@ import FlipMove from 'react-flip-move';
 
 import Message from './Message.js';
 const Elo = require('arpad');
-const socket = io.connect('http://192.168.0.105:3000')
+const socket = io.connect('http://localhost:3000')
 
 class Leaderboard extends Component {
   constructor(props) {

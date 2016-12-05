@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tape test/*.js",
     "build": "webpack",
-    "start:webpack": "webpack-dev-server --content-base build/ --inline --hot --host 192.168.0.105",
+    "start:webpack": "webpack-dev-server --content-base build/ --inline --hot",
     "start": "nodemon src/server/server.js",
     "fillDB": "node src/models/saveTestData.js"
   },
