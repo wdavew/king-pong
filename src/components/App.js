@@ -6,11 +6,11 @@ import Signup from './Signup.js';
 import LeagueForm from './LeagueForm.js';
 import { Router, Route, Link, browserHistory } from 'react-router'
 import { connect } from 'react-redux';
-import { fetchLeagues } from '../actions/actions.js';
+import { fetchLeagues } from '../actions/leagueActions.js';
 require('../static/mainstyle.css');
 
 const mapStateProps = (state) => (
-  { allLeagues: state.allLeagues }
+  { allLeagues: state.leagues }
 )
 
 class App extends Component {
@@ -43,6 +43,7 @@ class App extends Component {
     console.log('app has mounted and is requesting available leagues');
     this.syncLeagues();
   }
+  
   handleInputTextChange(event, stateKey) {
     console.log(this.state.selectedLeague);
     const newState = {};

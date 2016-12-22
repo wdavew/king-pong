@@ -1,8 +1,9 @@
-export default function reducer(state = {}, action) {
-  console.log(action);
-  switch(action.type) {
-    case 'SET_LEAGUES':
-      return Object.assign({}, state, {allLeagues : action.allLeagues});
-  }
-  return state;
-}
+import leagues from './leagueReducer.js';
+import login from './loginReducer.js';
+
+import { combineReducers } from 'redux'
+
+export default combineReducers({
+  leagues,
+  login,
+})
