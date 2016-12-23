@@ -41,7 +41,7 @@ export const loginUser = (creds) => {
         ? response
         : (dispatch(loginError(response.message)), Promise.reject(response))
       })
-      .then(user => dispatch(loginSuccess(user)))
+      .then(user => (localStorage.setItem('id_token', user.id_token), dispatch(loginSuccess(user))))
       .then(result => true)
       .catch(err => console.log('error:', err))
   }

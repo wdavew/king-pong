@@ -52,4 +52,32 @@ describe('login action', () => {
         expect(dispatch.callCount).toEqual(2);
       })
   })
+  
+  it('should set local storage with successful login', () => {
+    global.fetch = jest.fn(() => new Promise(resolve => resolve({
+      id_token: "token",
+      ok: true,
+      json: function () { return this }
+    })));
+    const dispatch = sinon.spy();
+    return actions.loginUser({ username: 'John', password: 'John' })(dispatch)
+      .then(res => {
+        expect(localStorage.getItem('id_token')).toEqual('token');
+      })
+  })
+
+  it('should not set local storage with failed login', () => {
+    localStorage.clear();
+    global.fetch = jest.fn(() => new Promise(resolve => resolve({
+      id_token: "token",
+      ok: false,
+      message: 'Incorrect username or password',
+      json: function () { return this }
+    })));
+    const dispatch = sinon.spy();
+    return actions.loginUser({ username: 'John', password: 'John' })(dispatch)
+      .then(res => {
+        expect(localStorage.getItem('id_token')).toEqual(undefined);
+      })
+  })
 })

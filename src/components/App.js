@@ -4,37 +4,18 @@ import LeagueList from './LeagueList.js';
 import Login from './Login.js';
 import Signup from './Signup.js';
 import LeagueForm from './LeagueForm.js';
+import { updateNameInput, updatePassInput, loginUser, logoutRequest } from '../actions/authActions';
 import { Router, Route, Link, browserHistory } from 'react-router'
 import { connect } from 'react-redux';
 import { fetchLeagues } from '../actions/leagueActions.js';
 require('../static/mainstyle.css');
 
-const mapStateProps = (state) => (
-  { allLeagues: state.leagues }
-)
+const mapStateProps = (state) => ({
+  allLeagues: state.leagues.allLeagues,
+  user: state.login.user
+})
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      username: '',
-      password: '',
-      newUser: '',
-      newPassword: '',
-      newLeague: '',
-      leagues: [],
-      activeLeague: '',
-      selectedLeague: '',
-    }
-    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
-    this.handleInputTextChange = this.handleInputTextChange.bind(this);
-    this.enterLeague = this.enterLeague.bind(this);
-    this.postUserData = this.postUserData.bind(this);
-    this.postLeagueData = this.postLeagueData.bind(this);
-    this.joinLeague = this.joinLeague.bind(this);
-  }
-
   syncLeagues() {
     this.props.dispatch(fetchLeagues());
   }
@@ -42,20 +23,6 @@ class App extends Component {
   componentDidMount() {
     console.log('app has mounted and is requesting available leagues');
     this.syncLeagues();
-  }
-  
-  handleInputTextChange(event, stateKey) {
-    console.log(this.state.selectedLeague);
-    const newState = {};
-    newState[stateKey] = event.target.value;
-    this.setState(newState);
-  }
-
-  enterLeague(league) {
-    this.setState({
-      activeLeague: league,
-      isLoggedIn: true,
-    });
   }
 
   joinLeague(e) {
@@ -93,19 +60,6 @@ class App extends Component {
     }).then(() => this.syncLeagues());
   }
 
-  handleLoginSubmit(e) {
-    e.preventDefault();
-    fetch(`/data/userLeagues/${this.state.username}`, { method: 'get' })
-      .then(response => response.json())
-      .then((jsonData) => {
-        const leagues = jsonData.map(obj => obj.league);
-        this.setState({
-          leagues: leagues,
-          isLoggedIn: true
-        })
-      })
-  }
-
   refreshUserLeagues() {
     fetch(`/data/userLeagues/${this.state.username}`, { method: 'get' })
       .then(response => response.json())
@@ -114,13 +68,14 @@ class App extends Component {
 
   render() {
     const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
-      <LeagueList leagues={this.state.leagues} enterLeague={this.enterLeague} />
+      <LeagueList leagues={'list of leauges'} enterLeague={() => null} />
       : null;
     const leaderboard = this.state.activeLeague ?
-      <Leaderboard league={this.state.activeLeague} username={this.state.username} />
+      <Leaderboard league={'TBD'} username={'TBD'} />
       : null;
     const login = !this.state.isLoggedIn ?
-      <Login submitLogin={this.handleLoginSubmit} handleInputTextChange={(e) => this.handleInputTextChange(e, 'username')} />
+      <Login submitLogin={this.props.handleLoginSubmit} 
+      handleInputTextChange={(e) => this.props.handleUsernameChange(e, 'username')} />
       : null;
     const signup = !this.state.isLoggedIn ?
       <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
@@ -141,4 +96,4 @@ class App extends Component {
   }
 };
 
-export default connect(mapStateProps)(App);
+export default connect(mapStateProps, mapDispatchToProps)(App);

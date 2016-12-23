@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": ".eslintrc.js",
+  "jest": {
+    "setupTestFrameworkScriptFile": "./tests/setup.js"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "npm test --watch",
