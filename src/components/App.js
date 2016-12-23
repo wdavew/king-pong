@@ -67,33 +67,18 @@ class App extends Component {
   }
 
   render() {
-    const leagues = !this.state.activeLeague && this.state.isLoggedIn ?
-      <LeagueList leagues={'list of leauges'} enterLeague={() => null} />
-      : null;
-    const leaderboard = this.state.activeLeague ?
-      <Leaderboard league={'TBD'} username={'TBD'} />
-      : null;
-    const login = !this.state.isLoggedIn ?
-      <Login submitLogin={this.props.handleLoginSubmit} 
-      handleInputTextChange={(e) => this.props.handleUsernameChange(e, 'username')} />
-      : null;
-    const signup = !this.state.isLoggedIn ?
-      <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
-      : null;
-    const leagueForm = this.state.isLoggedIn && !this.state.activeLeague ?
-      <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
-        leagues={this.props.allLeagues} handleInputTextChange={this.handleInputTextChange} />
-      : null;
+    // const leagues = <LeagueList leagues={'list of leauges'} enterLeague={() => null} />
+    // const leaderboard = <Leaderboard league={'TBD'} username={'TBD'} />
+    const login = <Login />
+    const signup = <Signup submit={this.postUserData} handleInputTextChange={this.handleInputTextChange} />
+    // const leagueForm = <LeagueForm chooseLeague={this.joinLeague} submit={this.postLeagueData} joinLeague={this.joinLeague}
+        // leagues={this.props.allLeagues} handleInputTextChange={this.handleInputTextChange} />
     return (
       <div className='container-fluid body-container'>
         {login}
-        {leagues}
-        {signup}
-        {leagueForm}
-        {leaderboard}
       </div>
     )
   }
 };
 
-export default connect(mapStateProps, mapDispatchToProps)(App);
+export default connect(mapStateProps)(App);

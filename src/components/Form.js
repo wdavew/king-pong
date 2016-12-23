@@ -4,7 +4,7 @@ function Form(props) {
   const {handleSubmit, handleUserChange, handlePasswordChange} = props;
   return (
     <div className='row'>
-      <form onSubmit={handleSubmit} type='submit'>
+      <form onSubmit={(e) => (e.preventDefault(), handleSubmit())} type='submit'>
         <div className='col-xs-6'>
           <input type='text' className='login-user' placeholder='Username' onChange={handleUserChange} />
         </div>

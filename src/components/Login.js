@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { updateNameInput, updatePassInput, loginUser, logoutRequest } from '../actions/authActions.js';
 import { connect } from 'react-redux';
+
 import Form from './Form.js';
 
 const mapStateToProps = (state) => ({
@@ -15,8 +17,8 @@ const mapDispatchToProps = {
   handleLogoutRequest: logoutRequest
 }
 
-function Login({user, usernameInput, passwordInput}) {
-  const creds = { username: usernameInput, password: passwordInput };
+function Login(props) {
+  const creds = { username: props.usernameInput, password: props.passwordInput };
   return (
     <div className='login-form'>
       <div id='title-div' className='container-fluid'>
