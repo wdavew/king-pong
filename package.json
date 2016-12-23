@@ -4,7 +4,8 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "test": "tape test/*.js",
+    "test": "jest",
+    "test:watch": "npm test --watch",
     "build": "webpack",
     "start:webpack": "webpack-dev-server --content-base build/ --inline --hot",
     "start": "nodemon src/server/server.js",
@@ -22,9 +23,11 @@
   "homepage": "https://github.com/wdavew/king-pong#readme",
   "devDependencies": {
     "babel-core": "^6.18.0",
+    "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-3": "^6.17.0",
     "css-loader": "^0.25.0",
     "eslint": "^3.8.1",
     "eslint-config-airbnb": "^12.0.0",
@@ -33,6 +36,7 @@
     "eslint-plugin-react": "^6.4.1",
     "jest": "^18.0.0",
     "nodemon": "^1.11.0",
+    "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
     "tape": "^4.6.2",
     "webpack": "^1.13.2"
