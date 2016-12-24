@@ -23,6 +23,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/data': 'http://localhost:3000',
+      '/sessions': 'http://localhost:3000',
     }
   },
 }

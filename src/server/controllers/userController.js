@@ -1,6 +1,8 @@
 const User = require('../../models/User');
 const Elo = require('arpad');
 const Promise = require('bluebird');
+const jwt = require('jsonwebtoken');
+const secret = require('../config.js').secret;
 
 function findUsersOfLeague(req, res) {
   User.findAll({
@@ -10,6 +12,27 @@ function findUsersOfLeague(req, res) {
     return res.json(data)
   });
 }
+
+function authenticateUser(req, res) {
+  console.log('reqbody', req.body);
+  User.find({ where: { username: req.body.username } })
+    .then((user) => {
+      req.user = user
+      if (!user) return res.json({ message: 'Invalid username or password' });
+      return user.authenticate(req.body.password)
+    })
+    .then((authresult) => {
+      if (authresult === true) {
+        console.log('authenticated');
+        const token = jwt.sign(req.user.username, secret)
+        return res.json({
+          id_token: token
+        })
+      }
+      return res.json({ message: 'Invalid username or password' });
+    });
+}
+
 
 function findUser(req, res) {
   User.find({ where: { username: req.params.username } }).then((data) => {
@@ -92,4 +115,4 @@ function joinLeague(req, res) {
 
 
 
-module.exports = { findUser, findUsersOfLeague, findUserLeagues, getNewElo, createNewUser, joinLeague };
+module.exports = { findUser, findUsersOfLeague, findUserLeagues, getNewElo, createNewUser, joinLeague, authenticateUser };

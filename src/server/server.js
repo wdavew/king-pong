@@ -9,6 +9,7 @@ const LeagueCtrl = require('./controllers/leagueController');
 const MsgCtrl = require('./controllers/msgController');
 const path = require('path');
 const io = require('socket.io')(server);
+const config = require('./config.js');
 
 io.on('connection', function (socket) {
   socket.on('reloadUserRequest', function (data) {
@@ -23,6 +24,9 @@ io.on('connection', function (socket) {
 });
 
 const jsonBodyParser = bodyParser.json()
+app.use(bodyParser.json());
+
+app.post('/sessions/create', UserCtrl.authenticateUser);
 
 app.get('/data/league/:league', UserCtrl.findUsersOfLeague);
 app.get('/data/league/:league/:username1/:username2', UserCtrl.getNewElo);
@@ -30,7 +34,6 @@ app.get('/data/users/:username', UserCtrl.findUser);
 app.get('/data/userLeagues/:username', UserCtrl.findUserLeagues);
 app.get('/data/getAllLeagues/leagues', LeagueCtrl.findAllLeagues);
 
-app.use(bodyParser.json());
 app.post('/data/createNewUser/newUser', UserCtrl.createNewUser);
 app.post('/data/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
 app.post('/data/leagues/join', UserCtrl.joinLeague);

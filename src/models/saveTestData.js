@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const testData = require('./testdata');
+const bcrypt = require('bcrypt');
 
 const sequelize = new Sequelize('kingpong', 'davidwilson', 'password', {
   host: 'localhost',
@@ -15,14 +16,20 @@ const User = sequelize.define('user', {
   username: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
     field: 'username' // Will result in an attribute that is firstName when user facing but first_name in the database
   },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    }
   },
   elo: {
-    allowNull: true,
+    allowNull: false,
     defaultValue: 1200,
     type: Sequelize.INTEGER,
   },
@@ -44,7 +51,33 @@ const User = sequelize.define('user', {
     allowNull: true,
     type: Sequelize.STRING,
   }
-});
+}, {
+    instanceMethods: {
+      authenticate: (plainTextPwd) => (
+        new Promise((resolve, reject) => {
+          bcrypt.compare(plainTextPwd, this.password, (err, res) => {
+            if (err) reject(err);
+            else resolve(res);
+          })
+        })
+      )
+    }
+  })
+
+
+User.beforeCreate(hashPassword);
+User.beforeUpdate(hashPassword);
+
+function hashPassword(user) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(user.password, 10, (err, hashedPassword) => {
+      if (err) (console.log(err), reject(err));
+      else resolve((console.log(hashedPassword), hashedPassword))
+    })
+  })
+    .then((hashedPassword) => { user.password = hashedPassword })
+}
+
 
 const League = sequelize.define('league', {
   id: {
@@ -60,6 +93,6 @@ const League = sequelize.define('league', {
 
 
 sequelize.sync({ force: true })
-  .then(() => User.bulkCreate(testData.userData))
+  .then(() => User.bulkCreate(testData.userData, {individualHooks: true}))
   .then(() => League.bulkCreate(testData.leagueData))
   .then(() => sequelize.close());
