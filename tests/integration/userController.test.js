@@ -1,0 +1,32 @@
+import {
+  findUser,
+  findUsersOfLeague,
+  findUserLeagues,
+  getNewElo,
+  createNewUser,
+  joinLeague,
+  authenticateUser
+} from '../../src/server/controllers/userController';
+let request = require('supertest');
+request = request('http://localhost:3000');
+
+describe('authenticateUser', () => {
+  it('should send 401 if username not found', () => {
+    return request
+      .post('/sessions/create')
+      .send({ username: 'Fake', password: 'Fake' })
+      .expect(401)
+  });
+  it('should send 401 if username is found but password does not match', () => {
+    return request
+      .post('/sessions/create')
+      .send({ username: 'Tywin_Lannister', password: 'Fake' })
+      .expect(401)
+  });
+  it('should send 200 if username is found with matching password', () => {
+    return request
+      .post('/sessions/create')
+      .send({ username: 'Tywin_Lannister', password: 'cat' })
+      .expect(200)
+  });
+})

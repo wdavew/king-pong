@@ -18,18 +18,18 @@ function authenticateUser(req, res) {
   User.find({ where: { username: req.body.username } })
     .then((user) => {
       req.user = user
-      if (!user) return res.json({ message: 'Invalid username or password' });
+      if (!user) return false;
       return user.authenticate(req.body.password)
     })
     .then((authresult) => {
       if (authresult === true) {
         console.log('authenticated');
         const token = jwt.sign(req.user.username, secret)
-        return res.json({
+        return res.status(200).json({
           id_token: token
         })
       }
-      return res.json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid username or password' });
     });
 }
 

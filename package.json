@@ -41,6 +41,7 @@
     "nodemon": "^1.11.0",
     "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
+    "supertest": "^2.0.1",
     "tape": "^4.6.2",
     "webpack": "^1.13.2"
   },
