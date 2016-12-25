@@ -28,8 +28,8 @@ export const logoutFailure = () => (
 export const loginUser = (creds) => {
   let init = {
     method: 'POST',
-    headers: { 'Content-Type':'application/x-www-form-urlencoded' },
-    body: `username=${creds.username}&password=${creds.password}`
+    headers: { 'Content-Type':'application/json' },
+    body: JSON.stringify(creds)
   }
   
   return (dispatch) => {

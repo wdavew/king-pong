@@ -1,6 +1,7 @@
 import * as actions from '../../src/actions/authActions.js';
 import * as types from '../../src/constants/ActionTypes.js';
 import sinon from 'sinon';
+import jwt from 'jsonwebtoken';
 
 describe('login action', () => {
   const expectedLoginAction = {
@@ -81,3 +82,4 @@ describe('login action', () => {
       })
   })
 })
+

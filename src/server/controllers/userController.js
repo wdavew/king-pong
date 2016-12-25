@@ -14,7 +14,6 @@ function findUsersOfLeague(req, res) {
 }
 
 function authenticateUser(req, res) {
-  console.log('reqbody', req.body);
   User.find({ where: { username: req.body.username } })
     .then((user) => {
       req.user = user
@@ -23,10 +22,10 @@ function authenticateUser(req, res) {
     })
     .then((authresult) => {
       if (authresult === true) {
-        console.log('authenticated');
         const token = jwt.sign(req.user.username, secret)
         return res.status(200).json({
-          id_token: token
+          id_token: token,
+          ok: true
         })
       }
       return res.status(401).json({ message: 'Invalid username or password' });
@@ -35,8 +34,8 @@ function authenticateUser(req, res) {
 
 
 function findUser(req, res) {
-  User.find({ where: { username: req.params.username } }).then((data) => {
-    console.log(data);
+  User.find({ where: { username: req.jwtPayload } }).then((data) => {
+    console.log('data is', data);
     return res.json(data)
   });
 }
@@ -47,7 +46,6 @@ function findUserLeagues(req, res) {
     attributes: ['username', 'league']
   }).then((data) => {
     if (data.length > 0) {
-      console.log(data);
       return res.json(data);
     } else {
       return res.status(400).end('User not found');

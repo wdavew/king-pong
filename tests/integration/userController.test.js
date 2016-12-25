@@ -30,3 +30,18 @@ describe('authenticateUser', () => {
       .expect(200)
   });
 })
+
+describe('findUser', () => {
+  it('should send 200 if user is found', () => {
+    return request
+      .get('/data/userInfo')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+      .expect(200);
+  })
+  it('should send 401 if unauthorized', () => {
+    return request
+      .get('/data/userInfo')
+      .set('x-access-token', 'fakeToken')
+      .expect(401);
+  })
+})
