@@ -4,13 +4,32 @@ const Promise = require('bluebird');
 const jwt = require('jsonwebtoken');
 const secret = require('../config.js').secret;
 
+function getAvailableLeagues(req, res, next) {
+  const leagueToCheck = req.params.league !== undefined ? req.params.league : req.body.league;
+  User.findAll({
+    where: { username: req.jwtPayload },
+    attributes: ['league']
+  })
+    .then(leagues => {
+      const leaguesArray = leagues.map(item => item.dataValues.league)
+      console.log('leagues', leaguesArray);
+      req.userLeagues = leaguesArray;
+      console.log(req.userLeagues);
+      if (!(req.userLeagues.includes(leagueToCheck))) {
+        return res.status(401).send('Unauthorized');
+      }
+      else next();
+    });
+}
+
 function findUsersOfLeague(req, res) {
   User.findAll({
     where: { league: req.params.league },
     order: 'elo DESC'
   }).then((data) => {
     return res.json(data)
-  });
+  })
+    .catch(err => (console.log(err), res.status(500).end()));
 }
 
 function authenticateUser(req, res) {
@@ -32,21 +51,21 @@ function authenticateUser(req, res) {
     });
 }
 
-
-function findUser(req, res) {
+function findUser(req, res, next) {
   User.find({ where: { username: req.jwtPayload } }).then((data) => {
-    console.log('data is', data);
-    return res.json(data)
+    res.body = data;
+    next();
   });
 }
 
 function findUserLeagues(req, res) {
   User.findAll({
-    where: { username: req.params.username },
+    where: { username: req.jwtPayload },
     attributes: ['username', 'league']
   }).then((data) => {
     if (data.length > 0) {
-      return res.json(data);
+      res.body['leagues'] = data;
+      return res.json(res.body);
     } else {
       return res.status(400).end('User not found');
     }
@@ -57,7 +76,7 @@ function getNewElo(req, res) {
   let user1;
   let user2;
   const elo = new Elo();
-  const user1Promise = User.findOne({ where: { username: req.params.username1, league: req.params.league } })
+  const user1Promise = User.findOne({ where: { username: req.jwtPayload, league: req.params.league } })
     .then(data => { user1 = data; })
   const user2Promise = User.findOne({ where: { username: req.params.username2, league: req.params.league } })
     .then(data => { user2 = data; })
@@ -87,14 +106,8 @@ function createNewUser(req, res) {
 }
 
 function joinLeague(req, res) {
-  let user;
-  console.log(req.body.username);
-  console.log(req.body.league);
-  User.findAll({ where: { username: req.body.username } })
-    .then(data => {
-      user = data
-    })
-    .then(() => {
+  User.findAll({ where: { username: req.jwtPayload } })
+    .then((user) => {
       if (user.length === 1 && user[0].league === null) {
         user[0].update({ league: req.body.league })
           .then(() => res.status(200).end())
@@ -111,6 +124,13 @@ function joinLeague(req, res) {
     });
 }
 
-
-
-module.exports = { findUser, findUsersOfLeague, findUserLeagues, getNewElo, createNewUser, joinLeague, authenticateUser };
+module.exports = {
+  getAvailableLeagues,
+  findUser,
+  findUsersOfLeague,
+  findUserLeagues,
+  getNewElo,
+  createNewUser,
+  joinLeague,
+  authenticateUser
+};

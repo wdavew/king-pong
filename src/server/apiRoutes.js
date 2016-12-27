@@ -2,24 +2,36 @@ const jwt = require('jsonwebtoken');
 const secret = require('./config.js').secret;
 const express = require('express');
 const UserCtrl = require('./controllers/userController');
+const LeagueCtrl = require('./controllers/leagueController');
+const MsgCtrl = require('./controllers/msgController');
 
 const verifyJwt = (req, res, next) => {
-  console.log('verifying jwt');
   const token = req.headers['x-access-token'];
-  console.log('token is', token);
   if (token) {
     jwt.verify(token, secret, (err, payload) => {
-      console.log('payload is', payload);
       if (payload) (req.jwtPayload = payload, next());
-      else res.status(401).send('Invalid JWT');
+      else return res.status(401).send('Unauthorized');
     });
   }
+  else return res.status(401).end('Unauthorized');
 };
 
 const dataRoutes = express.Router();
 dataRoutes.use(verifyJwt);
 
-dataRoutes.get('/userInfo',  UserCtrl.findUser)
+dataRoutes.get('/userInfo',  UserCtrl.findUser, UserCtrl.findUserLeagues);
+dataRoutes.get('/league/:league', UserCtrl.getAvailableLeagues, UserCtrl.findUsersOfLeague);
+dataRoutes.get('/league/:league/:username/', UserCtrl.getNewElo);
+dataRoutes.get('/userLeagues', UserCtrl.findUserLeagues);
+dataRoutes.get('/messages/get/:username', MsgCtrl.getMessages);
+
+dataRoutes.post('/createNewUser/newUser', UserCtrl.createNewUser);
+dataRoutes.post('/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
+dataRoutes.post('/leagues/join', UserCtrl.joinLeague);
+dataRoutes.post('/messages/send', UserCtrl.getAvailableLeagues, MsgCtrl.validateNewMsgRecipient,  MsgCtrl.createMessage);
+
+dataRoutes.delete('/messages/delete/:id', MsgCtrl.validateOwner, MsgCtrl.removeMessage);
+
 
 module.exports = dataRoutes;
 

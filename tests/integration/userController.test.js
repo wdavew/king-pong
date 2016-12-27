@@ -7,6 +7,7 @@ import {
   joinLeague,
   authenticateUser
 } from '../../src/server/controllers/userController';
+
 let request = require('supertest');
 request = request('http://localhost:3000');
 
@@ -43,5 +44,31 @@ describe('findUser', () => {
       .get('/data/userInfo')
       .set('x-access-token', 'fakeToken')
       .expect(401);
+  })
+  it('should send 401 if no token is provided', () => {
+    return request
+      .get('/data/userInfo')
+      .expect(401);
+  })
+
+  describe('findUsersOfLeague', () => {
+    it('should send 401 if unauthorized', () => {
+      return request
+        .get('/data/league/Westeros')
+        .set('x-access-token', 'fakeToken')
+        .expect(401);
+    })
+    it('should send 401 if user requests league they do not belong to', () => {
+      return request
+        .get('/data/league/Essos')
+        .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+        .expect(401);
+    })
+    it('should send 200 if user requests league they belong to', () => {
+      return request
+        .get('/data/league/Westeros')
+        .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+        .expect(200);
+    })
   })
 })
