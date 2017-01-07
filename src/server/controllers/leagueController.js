@@ -1,15 +1,6 @@
 const League = require('../../models/League');
 const Promise = require('bluebird');
 
-function findAllLeagues(req, res) {
-  const leagues = [];
-  User.findAll({ attributes: ['league'] , where: { username: req.jwtPayload}})
-  .then((data) => {
-    data.forEach(obj => leagues.push(obj.league));
-    return res.json(leagues);
-  });
-}
-
 function createNewLeague(req, res) {
   let league;
   League.findOne({ where: { league: req.body.league } })
@@ -28,5 +19,5 @@ function createNewLeague(req, res) {
     });
 }
 
-module.exports = { findAllLeagues, createNewLeague };
+module.exports = { createNewLeague };
 
