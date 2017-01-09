@@ -50,25 +50,38 @@ describe('findUser', () => {
       .get('/data/userInfo')
       .expect(401);
   })
+  it('should return an array of user\'s leagues ', () => {
+    return request
+      .get('/data/userInfo')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+      .expect({
+        username: 'Tywin_Lannister',
+        league: 'Westeros',
+        elo: 1200,
+        games: 0,
+        wins: 0,
+        leagues: ['Westeros'],
+      });
+  })
+});
 
-  describe('findUsersOfLeague', () => {
-    it('should send 401 if unauthorized', () => {
-      return request
-        .get('/data/league/Westeros')
-        .set('x-access-token', 'fakeToken')
-        .expect(401);
-    })
-    it('should send 401 if user requests league they do not belong to', () => {
-      return request
-        .get('/data/league/Essos')
-        .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
-        .expect(401);
-    })
-    it('should send 200 if user requests league they belong to', () => {
-      return request
-        .get('/data/league/Westeros')
-        .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
-        .expect(200);
-    })
+describe('findUsersOfLeague', () => {
+  it('should send 401 if unauthorized', () => {
+    return request
+      .get('/data/league/Westeros')
+      .set('x-access-token', 'fakeToken')
+      .expect(401);
+  })
+  it('should send 401 if user requests league they do not belong to', () => {
+    return request
+      .get('/data/league/Essos')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+      .expect(401);
+  })
+  it('should send 200 if user requests league they belong to', () => {
+    return request
+      .get('/data/league/Westeros')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+      .expect(200);
   })
 })
