@@ -22,7 +22,6 @@ dataRoutes.use(verifyJwt);
 dataRoutes.get('/userInfo',  UserCtrl.findUser, UserCtrl.findUserLeagues);
 dataRoutes.get('/league/:league', UserCtrl.getAvailableLeagues, UserCtrl.findUsersOfLeague);
 dataRoutes.get('/league/:league/:username/', UserCtrl.getNewElo);
-dataRoutes.get('/userLeagues', UserCtrl.findUserLeagues);
 dataRoutes.get('/messages/get/:username', MsgCtrl.getMessages);
 
 dataRoutes.post('/createNewUser/newUser', UserCtrl.createNewUser);
