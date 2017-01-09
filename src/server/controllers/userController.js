@@ -3,6 +3,12 @@ const Elo = require('arpad');
 const Promise = require('bluebird');
 const jwt = require('jsonwebtoken');
 const secret = require('../config.js').secret;
+const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize('kingpong', 'davidwilson', 'password', {
+  host: 'localhost',
+  dialect: 'postgres'
+});
 
 function getAvailableLeagues(req, res, next) {
   const leagueToCheck = req.params.league !== undefined ? req.params.league : req.body.league;
@@ -52,20 +58,22 @@ function authenticateUser(req, res) {
 }
 
 function findUser(req, res, next) {
-  User.find({ where: { username: req.jwtPayload } }).then((data) => {
-    res.body = data;
+  User.find({
+    where: { username: req.jwtPayload },
+    attributes: ['username', 'league', 'elo', 'games', 'league', 'wins'],
+  }).then((data) => {
+    res.userData = data.get({ plain: true });
     next();
   });
 }
 
 function findUserLeagues(req, res) {
-  User.findAll({
-    where: { username: req.jwtPayload },
-    attributes: ['username', 'league']
-  }).then((data) => {
+  sequelize.query(`SELECT league FROM users WHERE username='${req.jwtPayload}'`)
+  .spread((data) => {
+    const leagues = data.map(result => result.league);
     if (data.length > 0) {
-      res.body['leagues'] = data;
-      return res.json(res.body);
+      res.userData.leagues = leagues;
+      return res.json(res.userData);
     } else {
       return res.status(400).end('User not found');
     }
