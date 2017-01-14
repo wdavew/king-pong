@@ -24,7 +24,6 @@ dataRoutes.get('/league/:league', UserCtrl.getAvailableLeagues, UserCtrl.findUse
 dataRoutes.get('/league/:league/:username/', UserCtrl.getNewElo);
 dataRoutes.get('/messages/get/:username', MsgCtrl.getMessages);
 
-dataRoutes.post('/createNewUser/newUser', UserCtrl.createNewUser);
 dataRoutes.post('/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
 dataRoutes.post('/leagues/join', UserCtrl.joinLeague);
 dataRoutes.post('/messages/send', UserCtrl.getAvailableLeagues, MsgCtrl.validateNewMsgRecipient,  MsgCtrl.createMessage);
