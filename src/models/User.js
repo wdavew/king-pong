@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = new Sequelize('kingpong', 'davidwilson', 'password', {
   host: 'localhost',
-  dialect: 'postgres'
+  dialect: 'postgres',
 });
 
 const User = sequelize.define('user', {
@@ -17,14 +17,14 @@ const User = sequelize.define('user', {
     validate: {
       notEmpty: true,
     },
-    field: 'username' // Will result in an attribute that is firstName when user facing but first_name in the database
+    field: 'username', // Will result in an attribute that is firstName when user facing but first_name in the database
   },
   password: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
       notEmpty: true,
-    }
+    },
   },
   elo: {
     allowNull: false,
@@ -48,20 +48,20 @@ const User = sequelize.define('user', {
   imglink: {
     allowNull: true,
     type: Sequelize.STRING,
-  }
+  },
 }, {
     instanceMethods: {
-      authenticate: function(plainTextPwd) {
+      authenticate: function (plainTextPwd) {
         return new Promise((resolve, reject) => {
           console.log(plainTextPwd, this.password);
           bcrypt.compare(plainTextPwd, this.password, (err, res) => {
             if (err) reject(err);
             else resolve(res);
-          })
-        })
-      }
-    }
-  })
+          });
+        });
+      },
+    },
+  });
 
 
 User.beforeCreate(hashPassword);
