@@ -16,7 +16,6 @@ function createNewLeague(req, res) {
     })
     .then(() => {
       if (!league) {
-        console.log('creating', req.body)
         League.create(req.body)
           .then(() => res.status(200).end())
           .catch((error) => res.status(400).end(error.errors[0].message));

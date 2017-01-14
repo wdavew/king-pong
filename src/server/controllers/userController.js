@@ -18,9 +18,7 @@ function getAvailableLeagues(req, res, next) {
   })
     .then(leagues => {
       const leaguesArray = leagues.map(item => item.dataValues.league)
-      console.log('leagues', leaguesArray);
       req.userLeagues = leaguesArray;
-      console.log(req.userLeagues);
       if (!(req.userLeagues.includes(leagueToCheck))) {
         return res.status(401).send('Unauthorized');
       }
