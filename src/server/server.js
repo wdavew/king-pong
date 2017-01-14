@@ -8,6 +8,7 @@ const cors = require('cors');
 const dataRoutes = require('./apiRoutes.js');
 const UserCtrl = require('./controllers/userController');
 
+
 io.on('connection', function (socket) {
   socket.on('reloadUserRequest', function (data) {
     console.log('user socket emitting')
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/sessions/create', UserCtrl.authenticateUser);
+app.post('/createNewUser', UserCtrl.createNewUser);
 app.use('/data', dataRoutes);
 
 
