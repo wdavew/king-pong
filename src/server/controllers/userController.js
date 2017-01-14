@@ -69,15 +69,15 @@ function findUser(req, res, next) {
 
 function findUserLeagues(req, res) {
   sequelize.query(`SELECT league FROM users WHERE username='${req.jwtPayload}'`)
-  .spread((data) => {
-    const leagues = data.map(result => result.league);
-    if (data.length > 0) {
-      res.userData.leagues = leagues;
-      return res.json(res.userData);
-    } else {
-      return res.status(400).end('User not found');
-    }
-  });
+    .spread((data) => {
+      const leagues = data.map(result => result.league);
+      if (data.length > 0) {
+        res.userData.leagues = leagues;
+        return res.json(res.userData);
+      } else {
+        return res.status(400).end('User not found');
+      }
+    });
 }
 
 function getNewElo(req, res) {
@@ -95,6 +95,13 @@ function getNewElo(req, res) {
   })
 }
 
+function dropUser(username) {
+  return User.findOne({ where: { username } })
+    .then((user) => {
+      if (user) user.destroy();
+    })
+};
+
 function createNewUser(req, res) {
   let user;
   User.findOne({ where: { username: req.body.username } })
@@ -106,7 +113,10 @@ function createNewUser(req, res) {
         console.log('creating', req.body)
         User.create(req.body)
           .then(() => res.status(200).end())
-          .catch((error) => res.status(400).end(error.errors[0].message));
+          .catch((error) => {
+            console.log('ERROR', error);
+            res.status(400).end(error.errors[0].message)
+          })
       } else {
         res.status(400).end('User already exists');
       }
@@ -140,5 +150,6 @@ module.exports = {
   getNewElo,
   createNewUser,
   joinLeague,
-  authenticateUser
+  authenticateUser,
+  dropUser,
 };
