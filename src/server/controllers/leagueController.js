@@ -1,6 +1,13 @@
 const League = require('../../models/League');
 const Promise = require('bluebird');
 
+function deleteLeague(leagueName) {
+  return League.findOne({where: { league: leagueName }})
+  .then((league) => {
+    if (league) league.destroy();
+  })
+}
+
 function createNewLeague(req, res) {
   let league;
   League.findOne({ where: { league: req.body.league } })
@@ -19,5 +26,5 @@ function createNewLeague(req, res) {
     });
 }
 
-module.exports = { createNewLeague };
+module.exports = { createNewLeague, deleteLeague };
 
