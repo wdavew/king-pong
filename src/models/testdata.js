@@ -86,7 +86,7 @@ module.exports = {
     "elo": 1200,
     "games": 0,
     "wins": 0,
-    "league": "Westeros",
+    "league": "Vaes Dothrak",
     "imgLink": "#",
     "password": "cat"
   },
