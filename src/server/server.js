@@ -21,7 +21,7 @@ io.on('connection', function (socket) {
   });
 });
 
-const jsonBodyParser = bodyParser.json()
+const jsonBodyParser = bodyParser.json();
 app.use(bodyParser.json());
 app.use(cors());
 
