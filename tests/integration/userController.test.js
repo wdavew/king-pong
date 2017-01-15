@@ -1,23 +1,14 @@
 import {
-  findUser,
-  findUsersOfLeague,
-  findUserLeagues,
-  getNewElo,
-  createNewUser,
-  joinLeague,
-  authenticateUser,
   dropUser,
+  forceChangeElo,
 } from '../../src/server/controllers/userController';
 
 let request = require('supertest');
 request = request('http://localhost:3000');
 
-// the plan for testing this:
-
-// write separate unit tests for the actual database controllers
-
-// write integration routes using a test database by mocking it somehow
-// or using a different environment / dedicated test users
+beforeAll((done) => dropUser('Tywin_Lannister', 'Essos').then(() => done()));
+beforeAll((done) => forceChangeElo('Tywin_Lannister', 'Westeros', 1200).then(() => done()));
+beforeAll((done) => forceChangeElo('Cersei_Lannister', 'Westeros', 1200).then(() => done()));
 
 describe('authenticateUser', () => {
   it('should send 401 if username not found', () => {
@@ -119,7 +110,6 @@ describe('createNewUser', () => {
   });
 });
 
-
 describe('joinLeague', () => {
   it('should send 200 if user is not in league', () => {
     return request
@@ -127,6 +117,7 @@ describe('joinLeague', () => {
       .send({
         league: 'Essos',
       })
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
       .expect(200);
   });
   it('should send 400 if user is already in league', () => {
@@ -135,6 +126,7 @@ describe('joinLeague', () => {
       .send({
         league: 'Essos',
       })
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
       .expect(400);
   });
   it('should send 400 if user is already in league', () => {
@@ -143,7 +135,16 @@ describe('joinLeague', () => {
       .send({
         league: 'Essos',
       })
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
       .expect(400);
   });
 });
 
+describe('getNewElo', () => {
+  it('should send 200 if sucessfuly updated elo', () => {
+    return request
+      .get('/data/league/Westeros/Cersei_Lannister')
+      .set('x-access-token', 'eyJhbGciOiJIUzI1NiJ9.VHl3aW5fTGFubmlzdGVy.Nvnz-KU18HUCHhQnWDJZB8ajtI2qF9Qm_wvnGLf_m_w')
+      .expect(200);
+  });
+})
