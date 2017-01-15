@@ -22,7 +22,7 @@ dataRoutes.use(verifyJwt);
 dataRoutes.get('/userInfo',  UserCtrl.findUser, UserCtrl.findUserLeagues);
 dataRoutes.get('/league/:league', UserCtrl.getAvailableLeagues, UserCtrl.findUsersOfLeague);
 dataRoutes.get('/league/:league/:username/', UserCtrl.getNewElo);
-dataRoutes.get('/messages/get/:username', MsgCtrl.getMessages);
+dataRoutes.get('/messages/get', MsgCtrl.getMessages);
 
 dataRoutes.post('/createNewLeague/newLeague', LeagueCtrl.createNewLeague);
 dataRoutes.post('/leagues/join', UserCtrl.joinLeague);
