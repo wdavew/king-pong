@@ -65,7 +65,6 @@ const User = sequelize.define('user', {
 
 
 User.beforeCreate(hashPassword);
-User.beforeUpdate(hashPassword);
 
 function hashPassword(user) {
   return new Promise((resolve, reject) => {
